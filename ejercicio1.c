@@ -1,7 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
-#include<stdbool.h>
 
 //se crean los registros que almacenan los datos en memoria
 typedef struct data{
