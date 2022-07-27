@@ -95,6 +95,7 @@ void output_string_archive(list_type *node){
 
                   
             }
+           //inserta los numros al final de la cadena y realiza el salto de linea
             fprintf(archive,"%i",aux->elemnt.num);
 
             fprintf(archive,"\r\n");
@@ -102,7 +103,7 @@ void output_string_archive(list_type *node){
             aux=aux->sig;
             
       }
-
+      //reporta si hubo un error al en el archivo
       if(ferror(archive)){
             printf("ocurrio un error al guardar el archivo\n");
 
