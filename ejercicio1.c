@@ -103,23 +103,21 @@ void output_string_archive(list_type *node){
             
       }
 
-      fclose(archive);
-      
-      
-}
+      if(ferror(archive)){
+            printf("ocurrio un error al guardar el archivo\n");
 
-
-void print(list_type **nodo){
-      list_type *aux;
-      aux=*nodo;
-      
-      while (aux->sig!=NULL) {
-
-            printf("%i\n",aux->elemnt.num);
-            aux=aux->sig;
+      }else {
+            printf("el archivo se guardo con exito\n"); 
       }
+      
+      fclose(archive);
 
+      
+      
 }
+
+
+
 
 int main(int argc, char *argv[]){
       
@@ -135,7 +133,7 @@ int main(int argc, char *argv[]){
 
             load_data_list(&num);
             insert_data_list(&l,num);
-            print(&l);
+           
             if (num.num==0){
                   
                   cond=1;
@@ -146,7 +144,7 @@ int main(int argc, char *argv[]){
       
      
       output_string_archive(l);
-      
+
       
       return 0;
 }
