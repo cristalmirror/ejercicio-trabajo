@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<math.h>
 #include<stdbool.h>
 
 //se crean los registros que almacenan los datos en memoria
@@ -26,15 +27,12 @@ void init_data_list(list_type **node){
 //carga los dataos a la lista
 void load_data_list(data_type *number){
 
-      printf("introdusca un numero: "); scanf("%i", &number->num);
+      printf("introdusca un numero: "); scanf("%i",&number->num);
 
 }
 
 //devuelve un valor booleano si la condicion es verdadera
-bool condition(data_type number){
 
-      return (number.num!=0);
-}
 
 //carga los datos de la lista
 void insert_data_list(list_type **node,data_type number){
@@ -66,7 +64,7 @@ void insert_data_list(list_type **node,data_type number){
 
 //esta funcion carga los numeros de la lista en un archivo
 void output_string_archive(list_type *node){
-      int cont=0;
+      int i=0,n_dig=0,x;
       list_type *aux;
       aux=node;
       char _archive[15];//nombre del archivo
@@ -83,6 +81,20 @@ void output_string_archive(list_type *node){
       //recorre la lista con los datos y los carga en el archivo
       while (aux->sig!=NULL) {
 
+            //determina la cantidad de digitos del numero que se introduce 
+            x=aux->elemnt.num;
+            n_dig=0;
+            while (x>0) {
+                  n_dig++;
+                  x/=10;
+            }
+           
+            //inserta los ceros que faltan para que el formato sea correcto
+            for (i = n_dig; i <10; ++i) {
+                  fprintf(archive,"0");
+
+                  
+            }
             fprintf(archive,"%i",aux->elemnt.num);
 
             fprintf(archive,"\r\n");
@@ -96,11 +108,24 @@ void output_string_archive(list_type *node){
       
 }
 
+
+void print(list_type **nodo){
+      list_type *aux;
+      aux=*nodo;
+      
+      while (aux->sig!=NULL) {
+
+            printf("%i\n",aux->elemnt.num);
+            aux=aux->sig;
+      }
+
+}
+
 int main(int argc, char *argv[]){
       
       list_type *l;
       data_type num;
-      bool cond=true;
+      bool cond=0;
 
       //inicializador de la lista en valor nulo
       init_data_list(&l);
@@ -109,18 +134,15 @@ int main(int argc, char *argv[]){
       do{
 
             load_data_list(&num);
-
-            if (condition(num)){
-
-                  insert_data_list(&l,num);
-                       
-            }else{
+            insert_data_list(&l,num);
+            print(&l);
+            if (num.num==0){
                   
-                  cond=condition(num);
+                  cond=1;
                   
             }
             
-      } while (cond);
+      } while (cond==0);
       
      
       output_string_archive(l);
