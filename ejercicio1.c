@@ -143,7 +143,7 @@ int main(int argc, char *argv[]){
             
       } while (cond==0);
       
-     
+      //introduce los datos de la lista en un archivo
       output_string_archive(l);
 
       
