@@ -18,7 +18,7 @@ PROTOCOLO TCP*/
 
 //tamanio del buffer, ip, puerrto y maximo numero de clientes conectados
 #define SERVER_PORT 8080
-#define SERVER_HOST_IP "192.168.0.3"
+#define SERVER_HOST_IP "192.168.114.37"
 #define BUFFER_SIZE 100
 #define CLIE_CONECT 6
 
@@ -183,22 +183,67 @@ int operation3(){
 }
 
 //devuelve el mensaje final
-void operation4(){
-      char aux[100];
-      int di,cond=12;
+int operation4(){
+      char aux[12],aux2[100],ctnc[2],c;
+      int di,cond=12,tnc,a,i;
+
+      //inicializa el buffer en 0
+      for (i = 0; i < 100; ++i) {
+            buffer_tx[i]=0;
+      }
       
       di=strlen(cad_mont);
 
-      cond=cond-di:
+      //crea el formato correcto para el monto
+      cond=cond-di;
       while (cond!=0) {
 
+            aux[cond]=48;
 	    
-	    
-	    cond--; 
+            cond--; 
+      }
+      
+      //coloca la cadena del monto al final de la cadena de 0
+      strcat(aux,cad_mont);
+
+      //se coloca el tipo de targeta
+      strcat(aux2,"targeta tipo: 0200 ");
+
+      //hacemos el formato del numero de tageta que hay que imprimir
+      tnc=strlen(cad_num_card);
+
+      
+      a=tnc-10;
+      c=48+a;
+      //cracion del mensaje a enviar
+      strcat(ctnc,"1");
+      ctnc[1]=c;
+      strcat(aux2,"n targeta:x");
+      strcat(aux2,ctnc);
+      strcat(aux2," ");
+      strcat(aux2,cad_num_card);
+      strcat(aux2,"monto:");
+      strcat(aux2,aux);
+      strcat(aux2," seg code:");
+      strcat(aux2,cad_seg_code);
+      strcat(aux2,"\n");
+      //envio del mensaje
+      strcat(buffer_tx,aux2);
+      
+      
+      
+      return 4;
+
+}
+
+void operation5(){
+      int i;
+
+      //al final de toda las operaciones limpia el buffer_tx
+      for (i = 0; i < 100; ++i) {
+            buffer_tx[i]=0;
       }
 
-      strcat();
-      
 
 }
 
@@ -270,33 +315,35 @@ int main(int argc, char *argv[]){
 
                         //leer los datos del buffer de entrada 
                         len_rx=read(connec_file_des,buffer_rx,sizeof(buffer_rx));
-			printf("el cliente: %s\n",buffer_rx);
+                        printf("el cliente: %s\n",buffer_rx);
 		        
 
-			//comprueba los datos que ingreso el cliente
-			op=operation1(i);
+                        //comprueba los datos que ingreso el cliente
+                        op=operation1(i);
 
-			i++;//determina la operacion que se hace segun el dato entrante
+                        i++;//determina la operacion que se hace segun el dato entrante
 			
-			if((i==3)&&(op==0)){
-			     op=operacion2();
-			}else if(op==2) {
-			      op=operation3();
-			}else {
-			      operation4();
-			}
+                        if((i==3)&&(op==0)){
+                              op=operacion2();
+                        }else if(op==2) {
+                              op=operation3();
+                        }else if(op==3){
+                             op=operation4();
+                        }else if(op==4){
+                              operation5();
+                        }
 			
                         if(len_rx==-1){ //si se produce un error devuelve un mensaje
 
                               fprintf(stderr, "se produjo un error en el servidor: %d: %s ",errno ,strerror(errno));
                               return -1;
-
+                              
                         }else if(len_rx==0){
 
                               printf("se cerro el socket del cliente");
                               close(connec_file_des);
-			      break;//aniado un breack para finalizar el bucle cuando se cierra el descriptor del 
-                              
+                              break;//aniado un breack para finalizar el bucle cuando se cierra el descriptor del 
+                  
                         }else {
                               write(connec_file_des,buffer_tx,strlen(buffer_tx));
                              
